@@ -16,6 +16,8 @@ namespace Innovation_Task.Services
         Task BulkUpdateAsync(IEnumerable<T> entities);
 
         Task BulkDeleteAsync(List<Guid> ids);
+        Task<byte[]> ExportToExcelAsync(string sheetName, string? title, List<string>? selectedColumns);
+
         Task SaveAsync();
     }
 }

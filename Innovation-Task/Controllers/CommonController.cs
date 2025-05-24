@@ -8,9 +8,37 @@ namespace Innovation_Task.Controllers
     [ApiController]
     public class CommonController<T> : ControllerBase where T : BaseEntitie_SoftDelete { 
         private readonly  ICommonServices<T> _service;
-        public CommonController(ICommonServices<T> service) { 
+        private readonly ExcelExportService _exportService;
+
+        public CommonController(ICommonServices<T> service, ExcelExportService exportService) { 
            _service = service;
-   
+            _exportService = exportService;
+        }
+
+        [HttpGet("ExportSelected")]
+        public async Task<IActionResult> ExportSelected(
+      [FromQuery] string sheetName,
+      [FromQuery] string title,
+      [FromQuery] List<string> selectedColumns)
+        {
+            if (selectedColumns == null || !selectedColumns.Any())
+                return BadRequest("No columns selected");
+
+            try
+            {
+
+                var data = await _service.GetAllAsync();
+                var fileBytes = _exportService.ExportToExcel(data.ToList(), sheetName, title, selectedColumns);
+                return File(fileBytes,
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            $"{sheetName}.xlsx");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ExportSelected failed: {ex.Message}");
+                return StatusCode(500, "Failed to export Excel file.");
+            }
         }
 
         [HttpGet]

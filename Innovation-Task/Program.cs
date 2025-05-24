@@ -24,6 +24,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped(typeof(ICommonRepository<>), typeof(CommonRepository<>));
 builder.Services.AddScoped(typeof(ICommonServices<>), typeof(CommonServices<>));
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped(typeof(ICommonServices<>), typeof(CommonServices<>));
+builder.Services.AddScoped<ExcelExportService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

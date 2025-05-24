@@ -5,10 +5,23 @@ namespace Innovation_Task.Services
 {
     public class CommonServices<T> : ICommonServices<T> where T : BaseEntitie_SoftDelete
     {
-        private readonly ICommonRepository<T> _repository; 
-        public CommonServices( ICommonRepository<T> repository) {
+        
+        private readonly ICommonRepository<T> _repository;
+        private readonly ExcelExportService _excelExportService;
+        public CommonServices( ICommonRepository<T> repository,ExcelExportService excelExportService) {
         _repository = repository;
+            _excelExportService = excelExportService;
         }
+        public async Task<byte[]> ExportToExcelAsync(string sheetName, string? title = null, List<string>? selectedColumns = null)
+        {
+        
+            var allData = await _repository.GetAllAsync();
+
+            var filteredData = allData.Where(x => !x.IsDeleted).ToList();
+
+            return _excelExportService.ExportToExcel(filteredData, sheetName, title, selectedColumns);
+        }
+
 
         public async Task BulkDeleteAsync(List<Guid> ids)
         {

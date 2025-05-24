@@ -7,7 +7,8 @@ namespace Innovation_Task.Services
     public class EmployeeService : CommonServices<Employee>, IEmployeeService
     {
         private readonly ICommonRepository<Employee> _EmployeeRepository;
-        public EmployeeService(ICommonRepository<Employee> repository) : base(repository)
+        public EmployeeService(ICommonRepository<Employee> repository, ExcelExportService excelExportService) 
+        : base(repository, excelExportService)
         {
             _EmployeeRepository = repository;
         }

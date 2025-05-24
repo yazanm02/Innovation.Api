@@ -12,7 +12,8 @@ namespace Innovation_Task.Controllers
     {
         private readonly IEmployeeService _EmployeeService;
 
-        public EmployeeController(IEmployeeService EmployeeService) : base(EmployeeService)
+        public EmployeeController(IEmployeeService EmployeeService, ExcelExportService exportService)
+            : base(EmployeeService, exportService)
         {
             _EmployeeService = EmployeeService;
         }
@@ -26,5 +27,6 @@ namespace Innovation_Task.Controllers
         {
             return Ok(await _EmployeeService.UpdateEmployeeAsync(employeeDTO));
         }
+       
     }
 }
